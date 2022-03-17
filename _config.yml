@@ -1,6 +1,6 @@
 # Configurations
 title:            title
-longtitle:
+longtitle:        long_titme
 author:           keysugar
 email:            keysugar2022@gmail.com
 description: >
@@ -52,3 +52,7 @@ regenerate:       true
 plugins:
   - jekyll-feed
   - jemoji
+
+
+
+timezone            : null
