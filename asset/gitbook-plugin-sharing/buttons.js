@@ -1,4 +1,4 @@
-require(['gitbook', 'jquery'], function(gitbook, $) {
+require(['asset', 'jquery'], function(gitbook, $) {
     var SITES = {
         'facebook': {
             'label': 'Facebook',

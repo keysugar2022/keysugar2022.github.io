@@ -1,5 +1,5 @@
 require([
-    'gitbook',
+    'asset',
     'jquery'
 ], function(gitbook, $) {
     // Global search objects
@@ -16,7 +16,7 @@ require([
 
     // Initialize search engine with config
     function init(config) {
-        if (!engine) throw new Error('No engine set for research. Set an engine using gitbook.research.setEngine(Engine).');
+        if (!engine) throw new Error('No engine set for research. Set an engine using asset.research.setEngine(Engine).');
 
         return engine.init(config)
         .then(function() {
@@ -40,7 +40,7 @@ require([
         return initialized;
     }
 
-    // Initialize gitbook.search
+    // Initialize asset.search
     gitbook.search = {
         setEngine:     setEngine,
         getEngine:     getEngine,

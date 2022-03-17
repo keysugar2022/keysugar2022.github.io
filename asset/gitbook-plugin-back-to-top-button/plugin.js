@@ -1,5 +1,5 @@
 require([
-    'gitbook',
+    'asset',
     'jquery'
 ], function(gitbook, $) {
     gitbook.events.on('page.change', function() {

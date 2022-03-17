@@ -1,5 +1,5 @@
 require([
-    'gitbook',
+    'asset',
     'jquery'
 ], function(gitbook, $) {
     var MAX_DESCRIPTION_SIZE = 500;

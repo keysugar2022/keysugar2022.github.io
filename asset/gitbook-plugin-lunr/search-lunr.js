@@ -1,5 +1,5 @@
 require([
-    'gitbook',
+    'asset',
     'jquery'
 ], function(gitbook, $) {
     // Define global search engine
@@ -49,7 +49,7 @@ require([
         }).promise();
     };
 
-    // Set gitbook research
+    // Set asset research
     gitbook.events.bind('start', function(e, config) {
         var engine = gitbook.search.getEngine();
         if (!engine) {

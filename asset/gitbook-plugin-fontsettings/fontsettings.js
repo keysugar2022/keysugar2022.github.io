@@ -1,4 +1,4 @@
-require(['gitbook', 'jquery'], function(gitbook, $) {
+require(['asset', 'jquery'], function(gitbook, $) {
     // Configuration
     var MAX_SIZE       = 4,
         MIN_SIZE       = 0,
