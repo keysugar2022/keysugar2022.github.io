@@ -1,5 +1,5 @@
 require([
-    'asset',
+    'assets',
     'jquery'
 ], function(gitbook, $) {
     var MAX_RESULTS = 15;
