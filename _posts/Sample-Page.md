@@ -1,5 +1,6 @@
 ---
-title: Another Sample Page
+layout: post
+title: Sample Page
 published: true
 ---
 
