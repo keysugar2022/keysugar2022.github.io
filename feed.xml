@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-18T01:32:20+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">title</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>keysugar</name></author><entry><title type="html">go generic</title><link href="http://localhost:4000/jekyll/2022-03-13-go-generic.html" rel="alternate" type="text/html" title="go generic" /><published>2022-03-13T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/jekyll/go%20generic</id><content type="html" xml:base="http://localhost:4000/jekyll/2022-03-13-go-generic.html"><![CDATA[<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"fmt"</span>
+	<span class="s">"golang.org/x/exp/constraints"</span>
+	<span class="s">"hash/fnv"</span>
+	<span class="s">"strconv"</span>
+	<span class="s">"strings"</span>
+	<span class="s">"testing"</span>
+<span class="p">)</span>
+
+<span class="k">type</span> <span class="n">Integer</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="o">|</span> <span class="kt">int8</span> <span class="o">|</span> <span class="kt">int16</span> <span class="o">|</span> <span class="kt">int32</span> <span class="o">|</span> <span class="kt">int64</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">min</span><span class="p">[</span><span class="n">T</span> <span class="n">Integer</span><span class="p">](</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">T</span><span class="p">)</span> <span class="n">T</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">min2</span><span class="p">[</span><span class="n">T</span> <span class="n">constraints</span><span class="o">.</span><span class="n">Ordered</span><span class="p">](</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">T</span><span class="p">)</span> <span class="n">T</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">isSame</span><span class="p">[</span><span class="n">T</span> <span class="n">comparable</span><span class="p">](</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">T</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">b</span> <span class="o">!=</span> <span class="n">a</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Stringer</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">Integer</span>
+	<span class="n">String</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Print</span><span class="p">[</span><span class="n">T</span> <span class="n">Integer</span><span class="p">](</span><span class="n">a</span> <span class="n">T</span><span class="p">)</span> <span class="n">T</span> <span class="p">{</span>
+
+	<span class="k">return</span> <span class="n">a</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">String</span><span class="p">[</span><span class="n">T</span> <span class="n">Integer</span><span class="p">](</span><span class="n">a</span> <span class="n">T</span><span class="p">)</span> <span class="n">T</span> <span class="p">{</span>
+
+	<span class="k">return</span> <span class="n">a</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">TestA</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">m1</span> <span class="o">:=</span> <span class="n">min</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
+
+	<span class="n">m2</span> <span class="o">:=</span> <span class="n">min2</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+
+	<span class="n">m3</span> <span class="o">:=</span> <span class="n">isSame</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">m3</span><span class="p">)</span>
+
+	<span class="n">s1</span> <span class="o">:=</span> <span class="n">String</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+
+	<span class="k">var</span> <span class="n">ms1</span> <span class="n">MyString</span> <span class="o">=</span> <span class="s">"Hello"</span>
+	<span class="k">var</span> <span class="n">ms2</span> <span class="n">MyString</span> <span class="o">=</span> <span class="s">"World"</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">Equal</span><span class="p">(</span><span class="n">ms1</span><span class="p">,</span> <span class="n">ms2</span><span class="p">))</span>
+
+	<span class="n">mapTest</span><span class="p">()</span>
+
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">ComparableHasher</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">comparable</span> <span class="c">// ==, !=</span>
+	<span class="n">Hash</span><span class="p">()</span> <span class="kt">uint32</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">MyString</span> <span class="kt">string</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">s</span> <span class="n">MyString</span><span class="p">)</span> <span class="n">Hash</span><span class="p">()</span> <span class="kt">uint32</span> <span class="p">{</span>
+	<span class="n">h</span> <span class="o">:=</span> <span class="n">fnv</span><span class="o">.</span><span class="n">New32</span><span class="p">()</span>
+	<span class="n">h</span><span class="o">.</span><span class="n">Write</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">Sum32</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Equal</span><span class="p">[</span><span class="n">T</span> <span class="n">ComparableHasher</span><span class="p">](</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="n">T</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">true</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">Hash</span><span class="p">()</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">Hash</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Map</span><span class="p">[</span><span class="n">F</span><span class="p">,</span> <span class="n">T</span> <span class="n">any</span><span class="p">](</span><span class="n">s</span> <span class="p">[]</span><span class="n">F</span><span class="p">,</span> <span class="n">f</span> <span class="k">func</span><span class="p">(</span><span class="n">F</span><span class="p">)</span> <span class="n">T</span><span class="p">)</span> <span class="p">[]</span><span class="n">T</span> <span class="p">{</span>
+	<span class="n">rst</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="n">T</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">s</span> <span class="p">{</span>
+		<span class="n">rst</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">rst</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">mapTest</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">doubled</span> <span class="o">:=</span> <span class="n">Map</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">v</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">v</span> <span class="o">*</span> <span class="m">2</span>
+	<span class="p">})</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">doubled</span><span class="p">)</span>
+
+	<span class="n">uppered</span> <span class="o">:=</span> <span class="n">Map</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">"hello"</span><span class="p">,</span> <span class="s">"world"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">v</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="n">strings</span><span class="o">.</span><span class="n">ToUpper</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">uppered</span><span class="p">)</span>
+
+	<span class="n">toString</span> <span class="o">:=</span> <span class="n">Map</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">v</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">"str"</span> <span class="o">+</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+	<span class="p">})</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">toString</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">Node</span><span class="p">[</span><span class="n">T</span> <span class="n">any</span><span class="p">]</span> <span class="k">struct</span> <span class="p">{</span>
+	<span class="n">val</span>  <span class="n">T</span>
+	<span class="n">next</span> <span class="o">*</span><span class="n">Node</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span><span class="n">Node</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="n">Push</span><span class="p">(</span><span class="n">v</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span><span class="n">Node</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="p">{</span>
+	<span class="n">node</span> <span class="o">:=</span> <span class="n">NewNode</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+	<span class="n">n</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span>
+	<span class="k">return</span> <span class="n">node</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">NewNode</span><span class="p">[</span><span class="n">T</span> <span class="n">any</span><span class="p">](</span><span class="n">v</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span><span class="n">Node</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">Node</span><span class="p">[</span><span class="n">T</span><span class="p">]{</span><span class="n">val</span><span class="o">:</span> <span class="n">v</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">TestNode</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">node1</span> <span class="o">:=</span> <span class="n">NewNode</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+	<span class="n">node1</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">2</span><span class="p">)</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">node1</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="n">node1</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="s">" - "</span><span class="p">)</span>
+		<span class="n">node1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">.</span><span class="n">next</span>
+	<span class="p">}</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">()</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">()</span>
+
+	<span class="n">node2</span> <span class="o">:=</span> <span class="n">NewNode</span><span class="p">(</span><span class="s">"Hi"</span><span class="p">)</span>
+	<span class="n">node2</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="s">"hello"</span><span class="p">)</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="s">"How are you"</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">node2</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="n">node2</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="s">" - "</span><span class="p">)</span>
+		<span class="n">node2</span> <span class="o">=</span> <span class="n">node2</span><span class="o">.</span><span class="n">next</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="generic-slices-package">generic slices package</h2>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"fmt"</span>
+	<span class="s">"testing"</span>
+
+	<span class="s">"golang.org/x/exp/slices"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">TestSlice1</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">}</span>
+
+	<span class="n">contains</span> <span class="o">:=</span> <span class="n">slices</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"slices.Cotains =&gt; %t"</span><span class="p">,</span> <span class="n">contains</span><span class="p">)</span>
+
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Test_BinarySearch</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="c">//constraints.Ordered</span>
+	<span class="k">var</span> <span class="n">ordered</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">}</span>
+
+	<span class="c">//인덱스 번호가 반환된다</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="n">slices</span><span class="o">.</span><span class="n">BinarySearch</span><span class="p">(</span><span class="n">ordered</span><span class="p">,</span> <span class="m">6</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="c">//5</span>
+
+	<span class="k">var</span> <span class="n">orderedStrings</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">,</span> <span class="s">"d"</span><span class="p">,</span> <span class="s">"e"</span><span class="p">,</span> <span class="s">"f"</span><span class="p">,</span> <span class="s">"g"</span><span class="p">}</span>
+
+	<span class="n">idx2</span> <span class="o">:=</span> <span class="n">slices</span><span class="o">.</span><span class="n">BinarySearch</span><span class="p">(</span><span class="n">orderedStrings</span><span class="p">,</span> <span class="s">"c"</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">idx2</span><span class="p">)</span> <span class="c">//2</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="n">Test_BinarySearchFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="c">//Unused Capacity from slice</span>
+<span class="k">func</span> <span class="n">Test_Clip</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">src</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">,</span> <span class="s">"d"</span><span class="p">,</span> <span class="s">"e"</span><span class="p">,</span> <span class="s">"f"</span><span class="p">,</span> <span class="s">"g"</span><span class="p">}</span>
+
+	<span class="k">var</span> <span class="n">strs</span> <span class="o">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">src</span> <span class="p">{</span>
+		<span class="n">strs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+	<span class="p">}</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"strs =&gt; %s,  capacity =&gt; %d  length =&gt; %d </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">strs</span><span class="p">,</span> <span class="nb">cap</span><span class="p">(</span><span class="n">strs</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">strs</span><span class="p">))</span>
+
+	<span class="n">strs</span> <span class="o">=</span> <span class="n">strs</span><span class="p">[</span><span class="m">0</span><span class="o">:</span><span class="m">3</span><span class="p">]</span>
+
+	<span class="n">cliped</span> <span class="o">:=</span> <span class="n">slices</span><span class="o">.</span><span class="n">Clip</span><span class="p">(</span><span class="n">strs</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"cliped =&gt; %s,  capacity =&gt; %d length =&gt; %d </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">cliped</span><span class="p">,</span> <span class="nb">cap</span><span class="p">(</span><span class="n">cliped</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cliped</span><span class="p">))</span>
+
+<span class="p">}</span>
+<span class="k">func</span> <span class="n">Test_Clone</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}</span>
+<span class="k">func</span> <span class="n">Test_Compact</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">list</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">,</span> <span class="s">"d"</span><span class="p">}</span>
+
+	<span class="n">intList</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">7</span><span class="p">}</span>
+
+	<span class="n">slices</span><span class="o">.</span><span class="n">Compact</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+
+	<span class="n">slices</span><span class="o">.</span><span class="n">Compact</span><span class="p">(</span><span class="n">intList</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"intList ==&gt; %v </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">intList</span><span class="p">)</span>
+
+	<span class="n">intList2</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">7</span><span class="p">}</span>
+
+	<span class="n">slices</span><span class="o">.</span><span class="n">Compact</span><span class="p">(</span><span class="n">intList2</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"intList2 ==&gt; %v </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">intList2</span><span class="p">)</span>
+
+	<span class="n">intList3</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">8</span><span class="p">}</span>
+
+	<span class="n">slices</span><span class="o">.</span><span class="n">Compact</span><span class="p">(</span><span class="n">intList3</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"intList3 ==&gt; %v </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">intList3</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">Test_CompactFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Compare</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>     <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_CompareFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Contains</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>    <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Delete</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>      <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Equal</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>       <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_EqualFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>   <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Grow</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>        <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Index</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">list</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">,</span> <span class="s">"d"</span><span class="p">,</span> <span class="s">"e"</span><span class="p">,</span> <span class="s">"f"</span><span class="p">,</span> <span class="s">"g"</span><span class="p">}</span>
+
+	<span class="c">//list 에서 "g" 의 인덱스를 구한다.</span>
+	<span class="n">idx</span> <span class="o">:=</span> <span class="n">slices</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="s">"g"</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="c">// 6</span>
+<span class="p">}</span>
+<span class="k">func</span> <span class="n">Test_IndexFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>      <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Insert</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>         <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_IsSorted</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>       <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_IsSortedFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>   <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_Sort</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>           <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_SortFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>       <span class="p">{}</span>
+<span class="k">func</span> <span class="n">Test_SortStableFunc</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span>
+
+
+
+</code></pre></div></div>
+
+<h2 id="generic-constraints">generic constraints</h2>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"golang.org/x/exp/constraints"</span>
+	<span class="s">"testing"</span>
+<span class="p">)</span>
+
+<span class="k">type</span> <span class="n">aaa</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">constraints</span><span class="o">.</span><span class="n">Ordered</span> <span class="c">// &lt; &lt;= &gt;= &gt;.</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">b</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">comparable</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">c</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">constraints</span><span class="o">.</span><span class="n">Ordered</span>
+<span class="p">}</span>
+
+<span class="k">type</span> <span class="n">d</span> <span class="k">interface</span> <span class="p">{</span>
+	<span class="n">constraints</span><span class="o">.</span><span class="n">Ordered</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">TestSlice1</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+
+
+
+</code></pre></div></div>]]></content><author><name>keysugar</name></author><category term="Jekyll" /><summary type="html"><![CDATA[```go package main]]></summary></entry><entry><title type="html">노트북에 ubuntu 20.04 설치 후 mysql 설치</title><link href="http://localhost:4000/jekyll/2022-03-13-linux_mysql_%EC%84%A4%EC%B9%98.html" rel="alternate" type="text/html" title="노트북에 ubuntu 20.04 설치 후 mysql 설치" /><published>2022-03-13T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/jekyll/linux_mysql_%EC%84%A4%EC%B9%98</id><content type="html" xml:base="http://localhost:4000/jekyll/2022-03-13-linux_mysql_%EC%84%A4%EC%B9%98.html"><![CDATA[<h1 id="인터넷-없이-ubuntu-2004-lts-live-server-설치">인터넷 없이 ubuntu 20.04 LTS live server 설치</h1>
+
+<p>유선 인터넷 연결하고</p>
+
+<p>sudo netplan apply 하면 네트워크 활성화됨</p>
+
+<p>우분투 데스크탑 설치</p>
+
+<p>sudo apt-get update</p>
+
+<p>sudo apt-get install ubuntu-desktop</p>
+
+<p>재부팅하면</p>
+
+<p>sudo system reboot</p>
+
+<p>sudo apt-get upgrade</p>
+
+<p>mysql 8 설치</p>
+
+<p>sudo apt-get install mysql-server</p>
+
+<p>sudo mysql_secure_installation</p>
+
+<p>mysql db 초기 보안설정</p>
+
+<p>sudo /etc/init.d/mysql restart</p>
+
+<p>상태 보기</p>
+
+<p>systemctl status mysql.service</p>
+
+<p>로컬에선 접속되는데    remote  에서  3306  으로 접속안되서   netstat -tlnp  로 확인해보니</p>
+
+<p>localhost:3306 만 열려있다.</p>
+
+<p>그래서</p>
+
+<p>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 에서 수정해준다</p>
+
+<p>bind-address 0.0.0.0 으로 수정했는데 이번엔   접속 호스트 주소가 차단되어 있다.</p>
+
+<p>select Host,User,plugin,authentication_string FROM mysql.user</p>
+
+<p>하면    user root  가 host 필드는  localhost 값으로 설정되어 있다.</p>
+
+<p>모든 곳에서 접속할 수 있는 새  user 만들기</p>
+
+<p>create user ‘root’@’%’ identified by ‘eodlf147’;</p>
+
+<p>모든 권한 부여 하기</p>
+
+<p>grant all on <em>.</em> to root@’%’;</p>
+
+<p>적용하기</p>
+
+<p>flush privileges;</p>]]></content><author><name>keysugar</name></author><category term="Jekyll" /><summary type="html"><![CDATA[인터넷 없이 ubuntu 20.04 LTS live server 설치]]></summary></entry><entry><title type="html">first</title><link href="http://localhost:4000/jekyll/2022-03-13-first__.html" rel="alternate" type="text/html" title="first" /><published>2022-03-13T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/jekyll/first__</id><content type="html" xml:base="http://localhost:4000/jekyll/2022-03-13-first__.html"><![CDATA[<p>The jekyll-gitbook theme leverages [jekyll-toc][1] to generate the <em>Contents</em> for the page.
+The TOC feature is not enabled by default. To use the TOC feature, modify the TOC
+configuration in <code class="language-plaintext highlighter-rouge">_config.yml</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">toc</span><span class="pi">:</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+</code></pre></div></div>]]></content><author><name>keysugar</name></author><category term="Jekyll" /><summary type="html"><![CDATA[The jekyll-gitbook theme leverages [jekyll-toc][1] to generate the Contents for the page. The TOC feature is not enabled by default. To use the TOC feature, modify the TOC configuration in _config.yml:]]></summary></entry></feed>
