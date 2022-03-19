@@ -2,5 +2,6 @@
 layout: page
 title: About
 ---
+Software Engineer 
 
-Something about me.
+keysugar2022@gmail.com
